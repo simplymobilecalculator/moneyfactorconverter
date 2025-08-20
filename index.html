@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Factor Converter</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a clean look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Custom style for subtle hanging indents on the list */
+        .custom-hanging-list {
+            list-style-type: disc; /* Ensures disc bullets */
+            padding-left: 1.5rem; /* Overall padding for the list */
+        }
+
+        .custom-hanging-list li {
+            text-indent: -0.02rem; /* Pulls first line text slightly left of bullet */
+            padding-left: 0.02rem; /* Pushes subsequent lines text slightly right to align with first line */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 640px) { /* Tailwind's 'sm' breakpoint */
+            .custom-hanging-list {
+                padding-left: 1rem;
+            }
+            .custom-hanging-list li {
+                text-indent: -0.02rem;
+                padding-left: 0.02rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-3xl border border-gray-600">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-50">Money Factor Converter</h1>
+        <br> <!-- Added line break after the heading -->
+        <p class="text-left text-gray-300 mb-4">
+            When leasing a car, your monthly payment is influenced by several key factors:
+        </p>
+        <ul class="text-gray-300 mb-4 text-left custom-hanging-list">
+            <li class="mb-1"><span class="font-semibold text-gray-50">Capitalized Cost (Cap Cost):</span> The agreed-upon price of the car at the lease's start.</li>
+            <li class="mb-1"><span class="font-semibold text-gray-50">Residual Value:</span> The estimated value of the car at the end of the lease term, set by the leasing company.</li>
+            <li class="mb-1"><span class="font-semibold text-gray-50">Lease Term:</span> The duration of the lease, typically ranging from 24 to 48 months.</li>
+            <li class="mb-1"><span class="font-semibold text-gray-50">Money Factor:</span> The interest rate on the lease, expressed as a small decimal (e.g., 0.0025 instead of 6% APR).</li>
+        </ul>
+        <br><br> <!-- Added two line breaks after the bulleted list -->
+        <p class="text-left text-gray-300 mb-8">
+            The <span class="font-semibold text-gray-50">Money Factor</span> is a crucial component of a car lease, representing the interest rate.
+            It's typically expressed as a small decimal (e.g., 0.00250). This tool helps you easily convert between the Money Factor and its
+            equivalent <span class="font-semibold text-gray-50">Annual Percentage Rate (APR)</span>, making lease calculations clearer and more transparent dynamically.
+        </p>
+
+        <!-- Money Factor Input (Moved Up) -->
+        <div class="mb-6">
+            <label for="moneyFactorInput" class="block text-gray-200 text-sm font-medium mb-2">Money Factor</label>
+            <input type="number" id="moneyFactorInput" step="0.00001" placeholder="e.g., 0.00208"
+                   class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-50 placeholder-gray-400">
+        </div>
+
+        <!-- APR Input (Moved Down) -->
+        <div class="mb-6">
+            <label for="aprInput" class="block text-gray-200 text-sm font-medium mb-2">Annual Percentage Rate (APR) %</label>
+            <input type="number" id="aprInput" step="0.01" placeholder="e.g., 5.00"
+                   class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-50 placeholder-gray-400">
+        </div>
+
+        <div id="resultDisplay" class="bg-gray-800 p-6 rounded-lg mt-8 border border-gray-600 hidden">
+            <h2 class="text-xl font-semibold mb-3 text-gray-50">Conversion Result:</h2>
+            <p id="calculationResult" class="text-lg text-gray-200 break-words"></p>
+            <p id="errorMessage" class="text-red-400 text-sm mt-2 hidden"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const aprInput = document.getElementById('aprInput');
+            const moneyFactorInput = document.getElementById('moneyFactorInput');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const calculationResult = document.getElementById('calculationResult');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Function to show messages (results or errors)
+            const showMessage = (msg, isError = false) => {
+                resultDisplay.classList.remove('hidden');
+                if (isError) {
+                    errorMessage.textContent = msg;
+                    errorMessage.classList.remove('hidden');
+                    calculationResult.classList.add('hidden');
+                } else {
+                    calculationResult.textContent = msg;
+                    calculationResult.classList.remove('hidden');
+                    errorMessage.classList.add('hidden');
+                }
+            };
+
+            // Function to clear messages and associated input
+            const clearMessages = () => {
+                resultDisplay.classList.add('hidden');
+                calculationResult.textContent = '';
+                errorMessage.textContent = '';
+            };
+
+            // Event listener for APR input
+            aprInput.addEventListener('input', () => {
+                clearMessages(); // Clear any previous messages
+                const apr = parseFloat(aprInput.value);
+
+                if (aprInput.value === '') { // If input is empty, clear other field and result
+                    moneyFactorInput.value = '';
+                    clearMessages();
+                    return;
+                }
+
+                if (isNaN(apr) || apr <= 0) {
+                    showMessage('Please enter a valid Annual Percentage Rate (APR) greater than 0.', true);
+                    moneyFactorInput.value = ''; // Clear money factor if APR is invalid
+                    return;
+                }
+
+                // Money Factor = APR / 2400
+                const moneyFactor = apr / 2400;
+                moneyFactorInput.value = moneyFactor.toFixed(5); // Update Money Factor input field
+                showMessage(`Money Factor: ${moneyFactor.toFixed(5)}`);
+            });
+
+            // Event listener for Money Factor input
+            moneyFactorInput.addEventListener('input', () => {
+                clearMessages(); // Clear any previous messages
+                const moneyFactor = parseFloat(moneyFactorInput.value);
+
+                if (moneyFactorInput.value === '') { // If input is empty, clear other field and result
+                    aprInput.value = '';
+                    clearMessages();
+                    return;
+                }
+
+                if (isNaN(moneyFactor) || moneyFactor <= 0) {
+                    showMessage('Please enter a valid Money Factor greater than 0.', true);
+                    aprInput.value = ''; // Clear APR if Money Factor is invalid
+                    return;
+                }
+
+                // APR = Money Factor * 2400
+                const apr = moneyFactor * 2400;
+                aprInput.value = apr.toFixed(2); // Update APR input field
+                showMessage(`Annual Percentage Rate (APR): ${apr.toFixed(2)}%`);
+            });
+
+            // Initially clear fields and messages
+            aprInput.value = '';
+            moneyFactorInput.value = '';
+            clearMessages();
+        });
+    </script>
+</body>
+</html>
