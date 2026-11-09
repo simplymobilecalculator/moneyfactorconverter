@@ -1,162 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Money Factor Converter</title>
-    <!-- Tailwind CSS CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom font for a clean look */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* Custom style for subtle hanging indents on the list */
-        .custom-hanging-list {
-            list-style-type: disc; /* Ensures disc bullets */
-            padding-left: 1.5rem; /* Overall padding for the list */
-        }
-
-        .custom-hanging-list li {
-            text-indent: -0.02rem; /* Pulls first line text slightly left of bullet */
-            padding-left: 0.02rem; /* Pushes subsequent lines text slightly right to align with first line */
-        }
-
-        /* Responsive adjustments for smaller screens */
-        @media (max-width: 640px) { /* Tailwind's 'sm' breakpoint */
-            .custom-hanging-list {
-                padding-left: 1rem;
-            }
-            .custom-hanging-list li {
-                text-indent: -0.02rem;
-                padding-left: 0.02rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Money Factor Converter | Simply Mobile</title>
+<meta name="description" content="Free money factor to APR converter. See the real interest rate on a car lease, what it costs you, and whether the dealer marked it up.">
+<link rel="canonical" href="https://tech.simplysacramento.com/moneyfactorconverter/">
+<meta name="theme-color" content="#221530">
+<meta property="og:title" content="Money Factor Converter">
+<meta property="og:description" content="Turn a lease money factor into a plain APR — and back.">
+<meta property="og:url" content="https://tech.simplysacramento.com/moneyfactorconverter/">
+<script>(function(){var t='dark';try{var s=localStorage.getItem('smt-theme');if(s==='light'||s==='dark')t=s;}catch(e){}document.documentElement.setAttribute('data-theme',t);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,500&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#221530;--deep:#170E21;--panel:#2C1C3D;--panel2:#38254C;--field:#1C1128;--text:#F4EEDC;--head:#F4EEDC;--muted:#CDC3D6;--faint:#9F92AD;--gold:#D8B46A;--goldhi:#EACF93;--line:rgba(216,180,106,.22);--line2:rgba(216,180,106,.45);--glow:rgba(216,180,106,.09);--ring:rgba(216,180,106,.2);--btn:linear-gradient(180deg,#EACF93,#D8B46A);--btntext:#170E21;--good:#6CC5A0;--ok:#D8B46A;--bad:#C9544F;--serif:'Bodoni Moda',Georgia,serif;--hw:600;--sx:1;--shadow:0 18px 40px rgba(0,0,0,.35);color-scheme:dark}
+:root[data-theme="light"]{--bg:#E2DAE7;--deep:#D5CBDC;--panel:#EEE8F2;--panel2:#E5DDEB;--field:#F6F2F8;--text:#2F2536;--head:#2A1838;--muted:#605469;--faint:#857890;--gold:#B08A4A;--goldhi:#8A5A1C;--line:rgba(176,138,74,.28);--line2:rgba(176,138,74,.55);--glow:rgba(176,138,74,.12);--ring:rgba(176,138,74,.22);--btn:linear-gradient(180deg,#9C6B2C,#6E4416);--btntext:#FFF8EC;--good:#2E8B64;--ok:#C2902F;--bad:#B23B36;--serif:'Cormorant Garamond',Georgia,serif;--hw:700;--sx:1.16;--shadow:0 14px 34px rgba(90,60,20,.10);color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--bg);background-image:radial-gradient(900px 520px at 85% -8%,var(--glow),transparent 70%);color:var(--text);font:400 16px/1.5 Manrope,system-ui,sans-serif;overflow-x:hidden}
+a{color:var(--goldhi)}
+button{font-family:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--muted);text-decoration:none;font-size:14px;min-height:44px}
+.brand b{color:var(--head)}
+.logo{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line2);color:var(--gold);background:var(--panel);flex:none}
+.logo svg{width:18px;height:18px}
+.actions{display:flex;gap:8px;align-items:center;position:relative}
+.btn{min-height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--text);font:600 14px Manrope,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:border-color .15s,color .15s}
+.btn:hover{border-color:var(--gold);color:var(--goldhi)}
+.btn.primary{background:var(--btn);color:var(--btntext);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.06);color:var(--btntext)}
+.btn svg,.seg svg,.menu svg{width:18px;height:18px;flex:none}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:999px;padding:2px;background:var(--deep)}
+.seg button{min-height:40px;min-width:40px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:var(--faint);font:600 14px Manrope,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--panel2);color:var(--goldhi);box-shadow:inset 0 0 0 1px var(--line2)}
+.seg.full{display:flex;width:100%;border-radius:14px}
+.seg.full button{flex:1;border-radius:12px}
+.menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:6px;min-width:210px;box-shadow:var(--shadow);z-index:50;display:none}
+.menu.open{display:block}
+.menu button{display:flex;width:100%;min-height:44px;align-items:center;gap:10px;padding:0 12px;border:0;background:none;color:var(--text);font:500 15px Manrope,sans-serif;border-radius:10px;cursor:pointer;text-align:left}
+.menu button:hover{background:var(--panel2);color:var(--goldhi)}
+/* hero */
+.hero{padding:34px 0 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--gold);font-weight:700}
+h1{font-family:var(--serif);font-weight:var(--hw);font-size:calc(clamp(36px,6vw,60px) * var(--sx));line-height:1.02;margin:8px 0 12px;color:var(--head);letter-spacing:-.01em}
+h1 em{color:var(--gold);font-style:italic}
+.lede{color:var(--muted);max-width:58ch;margin:0}
+.switch{display:inline-flex;align-items:center;gap:12px;min-height:44px;cursor:pointer;color:var(--text);font-weight:600;position:relative;user-select:none}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch small{display:block;color:var(--faint);font-weight:500;font-size:12px}
+.track{width:48px;height:28px;border-radius:999px;background:var(--deep);border:1px solid var(--line2);position:relative;flex:none;transition:background .2s}
+.track::after{content:"";position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:var(--faint);transition:transform .2s,background .2s}
+.switch input:checked + .track{background:var(--gold)}
+.switch input:checked + .track::after{transform:translateX(20px);background:var(--btntext)}
+.switch input:focus-visible + .track{outline:2px solid var(--goldhi);outline-offset:3px}
+/* layout */
+.layout{display:grid;gap:18px;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);grid-template-areas:"inputs result" "adv result";align-items:start;padding-bottom:34px}
+#inputs{grid-area:inputs}
+#result{grid-area:result;position:sticky;top:16px}
+#adv{grid-area:adv;display:grid;gap:18px;min-width:0}
+body:not(.adv) .adv-only{display:none!important}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow);min-width:0}
+.panel h2{font-family:var(--serif);font-weight:var(--hw);font-size:calc(27px * var(--sx));line-height:1.15;margin:0 0 4px;color:var(--head);display:flex;gap:10px;align-items:baseline}
+.panel h2 .num{font-style:italic;color:var(--gold);font-size:.82em}
+.panel .sub{color:var(--faint);font-size:14px;margin:0 0 20px}
+/* fields */
+.field{margin-bottom:16px}
+.field > label,.field .l{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.inbox{display:flex;align-items:center;background:var(--field);border:1px solid var(--line2);border-radius:12px;min-height:52px;padding:0 14px;transition:border-color .15s,box-shadow .15s}
+.inbox:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px var(--ring)}
+.inbox .pre,.inbox .suf{color:var(--faint);font-weight:600}
+.inbox input{flex:1;min-width:0;width:100%;background:none;border:0;outline:0;color:var(--text);font:500 16px Manrope,sans-serif;padding:12px 6px}
+.inbox input::placeholder{color:var(--faint);opacity:.7}
+.inbox.big input{font-family:var(--serif);font-size:calc(26px * var(--sx));font-weight:var(--hw);padding:8px 6px}
+.hint{font-size:13px;color:var(--faint);margin-top:6px;line-height:1.45}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.suggest{margin-top:10px}
+.linkbtn{background:none;border:1px dashed var(--line2);color:var(--goldhi);border-radius:12px;min-height:44px;padding:0 14px;font:600 14px Manrope,sans-serif;cursor:pointer}
+.linkbtn:hover{border-style:solid}
+.bridge{display:flex;align-items:center;gap:12px;margin:2px 0 16px;color:var(--faint);font-size:13px}
+.bridge::before,.bridge::after{content:"";flex:1;height:1px;background:var(--line)}
+.bridge span{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.bridge svg{width:14px;height:14px;color:var(--gold)}
+/* result */
+.kicker{letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--gold);font-weight:700}
+.bignum{font-family:var(--serif);font-weight:var(--hw);font-size:calc(clamp(48px,9vw,78px) * var(--sx));line-height:1;color:var(--head);margin:12px 0 8px;letter-spacing:-.015em;overflow-wrap:anywhere}
+.bignum.empty{color:var(--faint);opacity:.6}
+.equiv{font-size:18px;color:var(--muted)}
+.equiv b{color:var(--goldhi)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:999px;font-weight:700;font-size:13px;border:1px solid currentColor;margin-top:18px}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill.good{color:var(--good)}.pill.ok{color:var(--ok)}.pill.bad{color:var(--bad)}
+.bar{height:10px;border-radius:999px;background:linear-gradient(90deg,var(--good),var(--ok) 50%,var(--bad));position:relative;margin-top:16px}
+.marker{position:absolute;top:50%;left:0;width:20px;height:20px;border-radius:50%;background:var(--panel);border:3px solid var(--head);transform:translate(-50%,-50%);transition:left .35s ease}
+.scale{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-top:8px}
+.verdict{margin:12px 0 0;color:var(--muted);font-size:15px}
+.dl{margin:18px 0 0;border-top:1px solid var(--line)}
+.dl .r{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px}
+.dl .r span:first-child{color:var(--muted)}
+.dl .r span:last-child{font-weight:700;text-align:right;white-space:nowrap}
+.dl .r.total span:last-child{color:var(--goldhi);font-size:17px}
+.note{font-size:13px;color:var(--faint);margin-top:14px;line-height:1.5}
+.alert{margin-top:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--bad);background:rgba(201,84,79,.10);font-size:14px}
+.okmsg{margin-top:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--good);background:rgba(108,197,160,.10);font-size:14px}
+.ref{width:100%;border-collapse:collapse;font-size:15px}
+.ref th,.ref td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:left}
+.ref th{color:var(--faint);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.ref td:last-child,.ref th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.ref tr.hit td{color:var(--goldhi);font-weight:700}
+.crosslink{display:inline-flex;align-items:center;min-height:44px;font-weight:600;text-decoration:none;margin-top:6px}
+.crosslink:hover{text-decoration:underline}
+/* pinned bar */
+#pin{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;background:var(--deep);border-top:1px solid var(--line2);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -10px 30px rgba(0,0,0,.25)}
+#pin .v{font-family:var(--serif);font-weight:var(--hw);font-size:calc(24px * var(--sx));color:var(--head);line-height:1.1}
+#pin .s{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);color:var(--text);padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;font-weight:600;font-size:14px}
+.toast.show{opacity:1}
+.foot{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--faint);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;align-items:center}
+.foot a{font-weight:600;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+@media (max-width:860px){
+  .layout{grid-template-columns:minmax(0,1fr);grid-template-areas:"inputs" "result" "adv"}
+  #result{position:static}
+  #pin.show{display:flex}
+  body.pinned{padding-bottom:86px}
+}
+@media (max-width:600px){
+  .lbl{display:none}
+  .panel{padding:18px;border-radius:16px}
+  .hero{padding:24px 0 16px}
+}
+@media (max-width:420px){
+  .top{gap:6px}
+  .brand{font-size:13px}
+  .actions{gap:6px}
+  .btn{padding:0 11px}
+  .row2{grid-template-columns:1fr}
+}
+@media print{
+  .actions,#pin,.switch,.suggest,.toast,.crosslink{display:none!important}
+  body{background:#fff!important;padding:0!important}
+  .panel{box-shadow:none;break-inside:avoid}
+  .layout{grid-template-columns:1fr;grid-template-areas:"inputs" "result" "adv"}
+  #result{position:static}
+}
+</style>
 </head>
-<body class="bg-gradient-to-br from-gray-800 to-gray-900 text-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-3xl border border-gray-600">
-        <h1 class="text-3xl font-bold text-center mb-6 text-gray-50">Money Factor Converter</h1>
-        <br> <!-- Added line break after the heading -->
-        <p class="text-left text-gray-300 mb-4">
-            When leasing a car, your monthly payment is influenced by several key factors:
-        </p>
-        <ul class="text-gray-300 mb-4 text-left custom-hanging-list">
-            <li class="mb-1"><span class="font-semibold text-gray-50">Capitalized Cost (Cap Cost):</span> The agreed-upon price of the car at the lease's start.</li>
-            <li class="mb-1"><span class="font-semibold text-gray-50">Residual Value:</span> The estimated value of the car at the end of the lease term, set by the leasing company.</li>
-            <li class="mb-1"><span class="font-semibold text-gray-50">Lease Term:</span> The duration of the lease, typically ranging from 24 to 48 months.</li>
-            <li class="mb-1"><span class="font-semibold text-gray-50">Money Factor:</span> The interest rate on the lease, expressed as a small decimal (e.g., 0.0025 instead of 6% APR).</li>
-        </ul>
-        <br><br> <!-- Added two line breaks after the bulleted list -->
-        <p class="text-left text-gray-300 mb-8">
-            The <span class="font-semibold text-gray-50">Money Factor</span> is a crucial component of a car lease, representing the interest rate.
-            It's typically expressed as a small decimal (e.g., 0.00250). This tool helps you easily convert between the Money Factor and its
-            equivalent <span class="font-semibold text-gray-50">Annual Percentage Rate (APR)</span>, making lease calculations clearer and more transparent dynamically.
-        </p>
-
-        <!-- Money Factor Input (Moved Up) -->
-        <div class="mb-6">
-            <label for="moneyFactorInput" class="block text-gray-200 text-sm font-medium mb-2">Money Factor</label>
-            <input type="number" id="moneyFactorInput" step="0.00001" placeholder="e.g., 0.00208"
-                   class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-50 placeholder-gray-400">
-        </div>
-
-        <!-- APR Input (Moved Down) -->
-        <div class="mb-6">
-            <label for="aprInput" class="block text-gray-200 text-sm font-medium mb-2">Annual Percentage Rate (APR) %</label>
-            <input type="number" id="aprInput" step="0.01" placeholder="e.g., 5.00"
-                   class="w-full px-4 py-2 bg-gray-600 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-50 placeholder-gray-400">
-        </div>
-
-        <div id="resultDisplay" class="bg-gray-800 p-6 rounded-lg mt-8 border border-gray-600 hidden">
-            <h2 class="text-xl font-semibold mb-3 text-gray-50">Conversion Result:</h2>
-            <p id="calculationResult" class="text-lg text-gray-200 break-words"></p>
-            <p id="errorMessage" class="text-red-400 text-sm mt-2 hidden"></p>
-        </div>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="https://simplysacramento.com/" target="_blank" rel="noopener">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.2 2 4.5 13.5h6.3L9.9 22l8.6-11.6h-6.2L13.2 2z"/></svg></span>
+      <span>Powered by <b>Simply Mobile</b></span>
+    </a>
+    <div class="actions">
+      <div class="seg" role="group" aria-label="Color theme">
+        <button type="button" data-theme-set="dark" aria-label="Dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="lbl">Dark</span></button>
+        <button type="button" data-theme-set="light" aria-label="Light theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="lbl">Light</span></button>
+      </div>
+      <button type="button" class="btn" id="clearBtn" aria-label="Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span class="lbl">Clear</span></button>
+      <button type="button" class="btn" id="printBtn" aria-label="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="lbl">Print</span></button>
+      <button type="button" class="btn primary" id="shareBtn" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>Share</button>
+      <div class="menu" id="shareMenu" role="menu">
+        <button type="button" role="menuitem" data-share="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>Copy link</button>
+        <button type="button" role="menuitem" data-share="email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7 10-7"/></svg>Email</button>
+        <button type="button" role="menuitem" data-share="text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/></svg>Text message</button>
+        <button type="button" role="menuitem" data-share="native" id="nativeShare" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8h16v-8"/><path d="M12 3v13M7 8l5-5 5 5"/></svg>More options…</button>
+      </div>
     </div>
+  </header>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const aprInput = document.getElementById('aprInput');
-            const moneyFactorInput = document.getElementById('moneyFactorInput');
-            const resultDisplay = document.getElementById('resultDisplay');
-            const calculationResult = document.getElementById('calculationResult');
-            const errorMessage = document.getElementById('errorMessage');
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Free car lease tool</div>
+      <h1>Money Factor <em>Converter</em></h1>
+      <p class="lede">Dealers quote lease interest as a tiny decimal called a <b>money factor</b>. Type it in to see the plain interest rate (APR) — or go the other way.</p>
+    </div>
+    <label class="switch" title="Show extra settings and breakdowns">
+      <input type="checkbox" id="advToggle">
+      <span class="track"></span>
+      <span>Advanced<small>What it costs &amp; markup check</small></span>
+    </label>
+  </section>
 
-            // Function to show messages (results or errors)
-            const showMessage = (msg, isError = false) => {
-                resultDisplay.classList.remove('hidden');
-                if (isError) {
-                    errorMessage.textContent = msg;
-                    errorMessage.classList.remove('hidden');
-                    calculationResult.classList.add('hidden');
-                } else {
-                    calculationResult.textContent = msg;
-                    calculationResult.classList.remove('hidden');
-                    errorMessage.classList.add('hidden');
-                }
-            };
+  <main class="layout">
+    <section class="panel" id="inputs" aria-labelledby="h-convert">
+      <h2 id="h-convert"><span class="num">i.</span> Convert</h2>
+      <p class="sub">Fill in either box. The other one updates as you type.</p>
 
-            // Function to clear messages and associated input
-            const clearMessages = () => {
-                resultDisplay.classList.add('hidden');
-                calculationResult.textContent = '';
-                errorMessage.textContent = '';
-            };
+      <div class="field">
+        <label for="mf">Money factor</label>
+        <div class="inbox big"><input id="mf" inputmode="decimal" autocomplete="off" placeholder="0.00208"></div>
+        <div class="hint">Find it on your lease quote. Dealers sometimes say it as a whole number, like “208.”</div>
+        <div class="suggest" id="suggest" hidden><button type="button" class="linkbtn" id="sugBtn"></button></div>
+      </div>
 
-            // Event listener for APR input
-            aprInput.addEventListener('input', () => {
-                clearMessages(); // Clear any previous messages
-                const apr = parseFloat(aprInput.value);
+      <div class="bridge"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg>× 2400</span></div>
 
-                if (aprInput.value === '') { // If input is empty, clear other field and result
-                    moneyFactorInput.value = '';
-                    clearMessages();
-                    return;
-                }
+      <div class="field">
+        <label for="apr">Interest rate (APR)</label>
+        <div class="inbox big"><input id="apr" inputmode="decimal" autocomplete="off" placeholder="5.00"><span class="suf">%</span></div>
+        <div class="hint">The yearly interest rate, the same kind you’d see on a car loan.</div>
+      </div>
+      <a class="crosslink" href="/moneyfactor/">Don’t know your money factor? Work it out from your payment →</a>
+    </section>
 
-                if (isNaN(apr) || apr <= 0) {
-                    showMessage('Please enter a valid Annual Percentage Rate (APR) greater than 0.', true);
-                    moneyFactorInput.value = ''; // Clear money factor if APR is invalid
-                    return;
-                }
+    <aside class="panel" id="result" aria-live="polite">
+      <div class="kicker" id="rKicker">Your rate</div>
+      <div class="bignum empty" id="rBig">—</div>
+      <div class="equiv" id="rEquiv">Enter a money factor or APR.</div>
+      <div id="rRating" hidden>
+        <span class="pill" id="rPill"></span>
+        <div class="bar"><span class="marker" id="rMarker"></span></div>
+        <div class="scale"><span>Great</span><span>Fair</span><span>High</span></div>
+        <p class="verdict" id="rVerdict"></p>
+      </div>
+      <div class="alert" id="rErr" hidden></div>
+      <p class="note">APR here is the standard estimate: money factor × 2400. Leases don’t have a true APR, but this is how dealers and lenders compare them.</p>
+    </aside>
 
-                // Money Factor = APR / 2400
-                const moneyFactor = apr / 2400;
-                moneyFactorInput.value = moneyFactor.toFixed(5); // Update Money Factor input field
-                showMessage(`Money Factor: ${moneyFactor.toFixed(5)}`);
-            });
+    <div id="adv" class="adv-only">
+      <section class="panel" id="costPanel" aria-labelledby="h-cost">
+        <h2 id="h-cost"><span class="num">ii.</span> What it costs you</h2>
+        <p class="sub">Add a few numbers from your quote to see the interest in dollars.</p>
+        <div class="row2">
+          <div class="field">
+            <label for="cap">Adjusted cap cost</label>
+            <div class="inbox"><span class="pre">$</span><input id="cap" inputmode="decimal" autocomplete="off" placeholder="32,000"></div>
+            <div class="hint">The price you’re financing, after fees and down payment.</div>
+          </div>
+          <div class="field">
+            <label for="res">Residual value</label>
+            <div class="inbox"><span class="pre">$</span><input id="res" inputmode="decimal" autocomplete="off" placeholder="19,500"></div>
+            <div class="hint">What the car is worth at lease end.</div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="term">Lease length</label>
+            <div class="inbox"><input id="term" inputmode="numeric" autocomplete="off" placeholder="36"><span class="suf">months</span></div>
+          </div>
+          <div class="field">
+            <label for="buy">Lender’s base rate <span style="color:var(--faint);font-weight:500">(optional)</span></label>
+            <div class="inbox"><input id="buy" inputmode="decimal" autocomplete="off" placeholder="0.00180"></div>
+            <div class="hint" id="buyHint">Ask the dealer for the “buy rate.” We’ll show any markup.</div>
+          </div>
+        </div>
+        <div class="dl" id="costOut"></div>
+        <p class="note" id="costNote">Fill in cap cost, residual and lease length to see dollars.</p>
+      </section>
 
-            // Event listener for Money Factor input
-            moneyFactorInput.addEventListener('input', () => {
-                clearMessages(); // Clear any previous messages
-                const moneyFactor = parseFloat(moneyFactorInput.value);
+      <section class="panel" aria-labelledby="h-ref">
+        <h2 id="h-ref"><span class="num">iii.</span> Quick reference</h2>
+        <p class="sub">Common rates side by side.</p>
+        <table class="ref"><thead><tr><th>APR</th><th>Money factor</th></tr></thead><tbody id="refBody"></tbody></table>
+      </section>
+    </div>
+  </main>
 
-                if (moneyFactorInput.value === '') { // If input is empty, clear other field and result
-                    aprInput.value = '';
-                    clearMessages();
-                    return;
-                }
+  <footer class="foot">
+    <span>© <span id="yr">2026</span> Simply Mobile. Estimates only — your lease contract is the final word.</span>
+    <a href="https://tech.simplysacramento.com/">More free tools →</a>
+  </footer>
+</div>
 
-                if (isNaN(moneyFactor) || moneyFactor <= 0) {
-                    showMessage('Please enter a valid Money Factor greater than 0.', true);
-                    aprInput.value = ''; // Clear APR if Money Factor is invalid
-                    return;
-                }
+<div id="pin" aria-hidden="true">
+  <div><div class="v" id="pinV"></div><div class="s" id="pinS"></div></div>
+  <button type="button" class="btn primary" id="pinBtn">See details</button>
+</div>
+<div class="toast" id="toast" role="status"></div>
 
-                // APR = Money Factor * 2400
-                const apr = moneyFactor * 2400;
-                aprInput.value = apr.toFixed(2); // Update APR input field
-                showMessage(`Annual Percentage Rate (APR): ${apr.toFixed(2)}%`);
-            });
+<script>
+(function(){
+  /* ---- Editable settings ----
+     Paste your published Google Sheet CSV link below (File > Share > Publish to web > CSV).
+     Sheet has two columns: key, value. Keys used here: apr_great_max, apr_fair_max.
+     If the sheet can't be reached, these built-in values are used. */
+  var SHEET_CSV_URL = '';
+  var DEFAULTS = { apr_great_max: 4.5, apr_fair_max: 7.5, tax_rate: 8.75 };
+  var CFG = Object.assign({}, DEFAULTS);
+  var ADV_KEY = 'smt-adv-moneyfactorconverter';
+  var REF_APRS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
 
-            // Initially clear fields and messages
-            aprInput.value = '';
-            moneyFactorInput.value = '';
-            clearMessages();
+  var $ = function(id){ return document.getElementById(id); };
+  function num(v){ if (v == null) return NaN; var s = String(v).replace(/[^0-9.\-]/g, ''); if (s === '' || s === '-' || s === '.') return NaN; return parseFloat(s); }
+  function money(v, d){ return v.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d == null ? 2 : d, maximumFractionDigits: d == null ? 2 : d }); }
+  function fmtMF(v){ return v.toFixed(Math.abs(v) < 0.0001 && v !== 0 ? 6 : 5); }
+  function fmtAPR(v){ return v.toFixed(2) + '%'; }
+  function clamp(x, a, b){ return Math.max(a, Math.min(b, x)); }
+
+  var src = 'mf';       // which box the person typed in last
+  var sugVal = null;
+
+  /* ---- theme ---- */
+  function setTheme(t, save){
+    document.documentElement.setAttribute('data-theme', t);
+    if (save) { try { localStorage.setItem('smt-theme', t); } catch(e){} }
+    document.querySelectorAll('[data-theme-set]').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-theme-set') === t ? 'true' : 'false'); });
+    var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', t === 'light' ? '#E2DAE7' : '#221530');
+  }
+  document.querySelectorAll('[data-theme-set]').forEach(function(b){ b.addEventListener('click', function(){ setTheme(b.getAttribute('data-theme-set'), true); }); });
+
+  /* ---- advanced ---- */
+  function setAdv(on, save){
+    document.body.classList.toggle('adv', on);
+    $('advToggle').checked = on;
+    if (save) { try { localStorage.setItem(ADV_KEY, on ? '1' : '0'); } catch(e){} }
+    render();
+  }
+  $('advToggle').addEventListener('change', function(){ setAdv(this.checked, true); });
+
+  /* ---- rating ---- */
+  function rate(apr){
+    var g = CFG.apr_great_max, f = CFG.apr_fair_max, max = f * 1.6;
+    var pos = clamp(apr / max, 0, 1) * 100;
+    if (apr <= g) return { cls: 'good', label: apr === 0 ? '0% promo rate' : 'Great rate', pos: pos, text: 'That’s a low money factor — about as good as lease rates get.' };
+    if (apr <= f) return { cls: 'ok', label: 'Fair rate', pos: pos, text: 'Typical for most leases. It’s still worth asking if a lower rate is available.' };
+    return { cls: 'bad', label: 'High rate', pos: pos, text: 'Worth pushing back. Ask the dealer for the lender’s base rate (“buy rate”) and whether it’s been marked up.' };
+  }
+
+  /* ---- core ---- */
+  function current(){
+    if (src === 'mf') { var m = num($('mf').value); return isFinite(m) ? { mf: m, apr: m * 2400 } : null; }
+    var a = num($('apr').value); return isFinite(a) ? { mf: a / 2400, apr: a } : null;
+  }
+
+  function render(){
+    var c = current();
+    var sug = $('suggest'), err = $('rErr');
+    sug.hidden = true; err.hidden = true; $('rRating').hidden = true;
+    var big = $('rBig'), eq = $('rEquiv'), kick = $('rKicker');
+    var valid = false;
+
+    if (c && src === 'mf' && c.mf >= 0.01) {
+      var s = c.mf; while (s >= 0.01) s /= 10;
+      sugVal = parseFloat(s.toFixed(6));
+      $('sugBtn').textContent = 'Dealer shorthand? Use ' + fmtMF(sugVal) + ' instead';
+      sug.hidden = false;
+    }
+
+    if (!c) {
+      kick.textContent = 'Your rate'; big.textContent = '—'; big.classList.add('empty');
+      eq.textContent = 'Enter a money factor or APR.';
+    } else if (c.mf < 0) {
+      kick.textContent = 'Your rate'; big.textContent = '—'; big.classList.add('empty'); eq.textContent = '';
+      err.textContent = 'A money factor can’t be negative. Double-check the number.'; err.hidden = false;
+    } else if (src === 'mf' && c.mf >= 0.01) {
+      kick.textContent = 'Your rate'; big.textContent = '—'; big.classList.add('empty');
+      eq.textContent = 'That number is too big for a money factor. Tap the suggestion under the box.';
+    } else {
+      valid = true;
+      big.classList.remove('empty');
+      if (src === 'mf') { kick.textContent = 'Interest rate (APR)'; big.textContent = fmtAPR(c.apr); eq.innerHTML = 'Money factor <b>' + fmtMF(c.mf) + '</b>'; }
+      else { kick.textContent = 'Money factor'; big.textContent = fmtMF(c.mf); eq.innerHTML = 'Same as <b>' + fmtAPR(c.apr) + '</b> APR'; }
+      var r = rate(c.apr);
+      var pill = $('rPill'); pill.className = 'pill ' + r.cls; pill.textContent = r.label;
+      $('rMarker').style.left = r.pos + '%';
+      $('rVerdict').textContent = r.text;
+      $('rRating').hidden = false;
+    }
+
+    renderCost(valid ? c : null);
+    renderRef(valid ? c.apr : null);
+    renderPin(valid ? c : null);
+    writeURL();
+  }
+
+  function renderCost(c){
+    var out = $('costOut'), note = $('costNote');
+    var cap = num($('cap').value), res = num($('res').value), term = Math.round(num($('term').value)), buy = num($('buy').value);
+    $('buyHint').textContent = isFinite(buy) && buy >= 0 && buy < 0.01 ? 'Same as ' + fmtAPR(buy * 2400) + ' APR.' : 'Ask the dealer for the “buy rate.” We’ll show any markup.';
+    out.innerHTML = ''; note.className = 'note';
+    if (!c) { note.textContent = 'Enter a money factor or APR above first.'; return; }
+    if (!(cap > 0 && res > 0 && term > 0)) { note.textContent = 'Fill in cap cost, residual and lease length to see dollars.'; return; }
+    var base = cap + res;
+    var monthly = base * c.mf, total = monthly * term;
+    var rows = [
+      ['Interest each month (rent charge)', money(monthly)],
+      ['Interest over ' + term + ' months', money(total), 'total']
+    ];
+    var msg = '';
+    if (isFinite(buy) && buy >= 0 && buy < 0.01) {
+      var mk = c.mf - buy;
+      if (mk > 0.0000049) {
+        rows.push(['Dealer markup', '+' + fmtMF(mk) + ' (' + (mk * 2400).toFixed(2) + '% APR)']);
+        rows.push(['Extra you pay each month', money(base * mk)]);
+        rows.push(['Extra over the lease', money(base * mk * term), 'total']);
+        msg = '<div class="alert">The rate you were quoted is higher than the lender’s base rate. Dealers are allowed to mark it up, but it’s negotiable — asking for the base rate could save you ' + money(base * mk * term, 0) + '.</div>';
+      } else {
+        msg = '<div class="okmsg">No markup — your rate matches the lender’s base rate.</div>';
+      }
+    }
+    out.innerHTML = rows.map(function(r){ return '<div class="r' + (r[2] ? ' ' + r[2] : '') + '"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>'; }).join('') + msg;
+    note.textContent = 'Rent charge = (cap cost + residual) × money factor, each month.';
+  }
+
+  function renderRef(apr){
+    var nearest = null;
+    if (apr != null) { var best = Infinity; REF_APRS.forEach(function(a){ var d = Math.abs(a - apr); if (d < best) { best = d; nearest = a; } }); if (best > 0.5) nearest = null; }
+    $('refBody').innerHTML = REF_APRS.map(function(a){ return '<tr' + (a === nearest ? ' class="hit"' : '') + '><td>' + a.toFixed(2) + '%</td><td>' + fmtMF(a / 2400) + '</td></tr>'; }).join('');
+  }
+
+  var resultVisible = true;
+  function renderPin(c){
+    var pin = $('pin');
+    if (!c) { pin.classList.remove('show'); document.body.classList.remove('pinned'); return; }
+    $('pinV').textContent = src === 'mf' ? fmtAPR(c.apr) + ' APR' : 'MF ' + fmtMF(c.mf);
+    $('pinS').textContent = src === 'mf' ? 'Money factor ' + fmtMF(c.mf) : 'Same as ' + fmtAPR(c.apr) + ' APR';
+    pin.classList.toggle('show', !resultVisible);
+    document.body.classList.add('pinned');
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){ resultVisible = es[0].isIntersecting; var c = $('rBig').classList.contains('empty'); $('pin').classList.toggle('show', !resultVisible && !c); }).observe($('result'));
+  }
+  $('pinBtn').addEventListener('click', function(){ var t = document.body.classList.contains('adv') ? $('costPanel') : $('result'); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+
+  /* ---- inputs ---- */
+  $('mf').addEventListener('input', function(){
+    src = 'mf';
+    var m = num(this.value);
+    $('apr').value = isFinite(m) && m >= 0 && m < 0.01 ? (m * 2400).toFixed(2) : '';
+    render();
+  });
+  $('apr').addEventListener('input', function(){
+    src = 'apr';
+    var a = num(this.value);
+    $('mf').value = isFinite(a) && a >= 0 ? fmtMF(a / 2400) : '';
+    render();
+  });
+  $('sugBtn').addEventListener('click', function(){
+    if (sugVal == null) return;
+    $('mf').value = fmtMF(sugVal); src = 'mf';
+    $('apr').value = (sugVal * 2400).toFixed(2);
+    render(); $('mf').focus();
+  });
+  ['cap', 'res', 'term', 'buy'].forEach(function(id){ $(id).addEventListener('input', render); });
+  document.querySelectorAll('input').forEach(function(i){ i.addEventListener('keydown', function(e){ if (e.key === 'Enter') i.blur(); }); });
+
+  /* ---- URL ---- */
+  function writeURL(){
+    var p = new URLSearchParams();
+    var mf = $('mf').value.trim(), apr = $('apr').value.trim();
+    if (src === 'mf' && mf) p.set('mf', mf); else if (src === 'apr' && apr) p.set('apr', apr);
+    ['cap', 'res', 'term', 'buy'].forEach(function(k){ var v = $(k).value.trim(); if (v) p.set(k, v); });
+    if ([].concat(Array.from(p.keys())).length) p.set('adv', document.body.classList.contains('adv') ? '1' : '0');
+    var q = p.toString();
+    try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '')); } catch(e){}
+  }
+  function readURL(){
+    var p = new URLSearchParams(location.search);
+    ['cap', 'res', 'term', 'buy'].forEach(function(k){ if (p.has(k)) $(k).value = p.get(k); });
+    if (p.has('mf')) { $('mf').value = p.get('mf'); src = 'mf'; var m = num(p.get('mf')); if (isFinite(m) && m < 0.01) $('apr').value = (m * 2400).toFixed(2); }
+    else if (p.has('apr')) { $('apr').value = p.get('apr'); src = 'apr'; var a = num(p.get('apr')); if (isFinite(a)) $('mf').value = fmtMF(a / 2400); }
+    return p.has('adv') ? p.get('adv') === '1' : null;
+  }
+
+  /* ---- share / clear / print ---- */
+  var toastT;
+  function toast(msg){ var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('show'); }, 2000); }
+  function shareText(){ var c = current(); return c && c.mf >= 0 && c.mf < 0.01 ? 'Money factor ' + fmtMF(c.mf) + ' = ' + fmtAPR(c.apr) + ' APR' : 'Free money factor to APR converter'; }
+  function copy(text){
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function(ok, no){ var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy') ? ok() : no(); } catch(e){ no(e); } ta.remove(); });
+  }
+  var menu = $('shareMenu');
+  if (navigator.share) $('nativeShare').hidden = false;
+  $('shareBtn').addEventListener('click', function(e){ e.stopPropagation(); var o = menu.classList.toggle('open'); this.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  document.addEventListener('click', function(e){ if (!menu.contains(e.target)) { menu.classList.remove('open'); $('shareBtn').setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') menu.classList.remove('open'); });
+  menu.addEventListener('click', function(e){
+    var b = e.target.closest('[data-share]'); if (!b) return;
+    writeURL(); var url = location.href, txt = shareText();
+    menu.classList.remove('open');
+    var how = b.getAttribute('data-share');
+    if (how === 'copy') copy(url).then(function(){ toast('Link copied'); }, function(){ prompt('Copy this link:', url); });
+    else if (how === 'email') location.href = 'mailto:?subject=' + encodeURIComponent('Money factor converter') + '&body=' + encodeURIComponent(txt + '\n\n' + url);
+    else if (how === 'text') location.href = 'sms:?&body=' + encodeURIComponent(txt + ' ' + url);
+    else if (how === 'native') navigator.share({ title: 'Money Factor Converter', text: txt, url: url }).catch(function(){});
+  });
+  $('clearBtn').addEventListener('click', function(){
+    ['mf', 'apr', 'cap', 'res', 'term', 'buy'].forEach(function(k){ $(k).value = ''; });
+    src = 'mf'; render(); toast('Cleared');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  var themeBeforePrint = null;
+  window.addEventListener('beforeprint', function(){ themeBeforePrint = document.documentElement.getAttribute('data-theme'); setTheme('light', false); });
+  window.addEventListener('afterprint', function(){ if (themeBeforePrint) setTheme(themeBeforePrint, false); });
+  $('printBtn').addEventListener('click', function(){ window.print(); });
+
+  /* ---- Google Sheet settings ---- */
+  function loadSheet(){
+    if (!SHEET_CSV_URL || !window.fetch) return;
+    var ctl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function(){ if (ctl) ctl.abort(); }, 6000);
+    fetch(SHEET_CSV_URL, { cache: 'no-store', signal: ctl ? ctl.signal : undefined })
+      .then(function(r){ return r.ok ? r.text() : ''; })
+      .then(function(txt){
+        clearTimeout(t);
+        txt.split(/\r?\n/).forEach(function(line){
+          var parts = line.split(','); var k = (parts[0] || '').replace(/"/g, '').trim().toLowerCase();
+          var v = num(parts.slice(1).join(','));
+          if (Object.prototype.hasOwnProperty.call(DEFAULTS, k) && isFinite(v)) CFG[k] = v;
         });
-    </script>
+        render();
+      }).catch(function(){ clearTimeout(t); });
+  }
+
+  /* ---- start ---- */
+  $('yr').textContent = new Date().getFullYear();
+  setTheme(document.documentElement.getAttribute('data-theme') || 'dark', false);
+  var urlAdv = readURL(), saved = null;
+  try { saved = localStorage.getItem(ADV_KEY); } catch(e){}
+  setAdv(urlAdv != null ? urlAdv : saved === '1', false);
+  loadSheet();
+})();
+</script>
 </body>
 </html>
